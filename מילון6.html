@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מילון עברית-ארמית</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; direction: rtl; background-color: #f4f4f4; }
+        #dictionary { margin-top: 20px; }
+        input { padding: 10px; width: 80%; margin: 10px; font-size: 16px; }
+        button { padding: 10px; cursor: pointer; font-size: 16px; margin: 5px; }
+        #result { margin-top: 20px; font-size: 20px; font-weight: bold; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <h1>מילון עברית-ארמית / ארמית-עברית</h1>
+    
+    <button onclick="toggleList()">🔄 החלף כיוון</button>
+
+    <div id="hebrewToAramaic">
+        <h2>🔵 עברית → ארמית</h2>
+        <input type="text" id="searchHebrew" placeholder="הקלד מילה בעברית...">
+        <button onclick="searchWord('hebrew')">חפש</button>
+    </div>
+
+    <div id="aramaicToHebrew" class="hidden">
+        <h2>🟠 ארמית → עברית</h2>
+        <input type="text" id="searchAramaic" placeholder="הקלד מילה בארמית...">
+        <button onclick="searchWord('aramaic')">חפש</button>
+    </div>
+
+    <div id="result"></div>
+
+    <script>
+        // מילון עברית לארמית
+        const hebrewToAramaicDict = {
+            "שלום": "שלמא",
+            "בית": "ביתא",
+            "אדם": "אינשא",
+            "אור": "נהורא",
+            "חכם": "חכימא",
+            "לחם": "נהמא",
+            "מים": "מיא",
+            "מלך": "מלכא",
+            "יום": "יומא",
+            "ספר": "ספרא"
+        };
+
+        // מילון ארמית לעברית
+        const aramaicToHebrewDict = {
+            "שלמא": "שלום",
+            "ביתא": "בית",
+            "אינשא": "אדם",
+            "נהורא": "אור",
+            "חכימא": "חכם",
+            "נהמא": "לחם",
+            "מיא": "מים",
+            "מלכא": "מלך",
+            "יומא": "יום",
+            "ספרא": "ספר"
+        };
+
+        // פונקציה לחיפוש מילים
+        function searchWord(direction) {
+            let input, dictionary;
+            if (direction === "hebrew") {
+                input = document.getElementById("searchHebrew").value.trim();
+                dictionary = hebrewToAramaicDict;
+            } else {
+                input = document.getElementById("searchAramaic").value.trim();
+                dictionary = aramaicToHebrewDict;
+            }
+
+            const resultDiv = document.getElementById("result");
+            if (dictionary[input]) {
+                resultDiv.innerHTML = `<b>${input}</b> = ${dictionary[input]} 
+                    <button onclick="copyToClipboard('${dictionary[input]}')">📋</button>`;
+            } else {
+                resultDiv.innerHTML = "❌ מילה לא נמצאה במילון.";
+            }
+        }
+
+        // פונקציה להעתקת טקסט
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text);
+            alert("הטקסט הועתק!");
+        }
+
+        // פונקציה להחלפת כיוון התרגום
+        function toggleList() {
+            const aramaicToHebrew = document.getElementById("aramaicToHebrew");
+            const hebrewToAramaic = document.getElementById("hebrewToAramaic");
+
+            if (aramaicToHebrew.classList.contains("hidden")) {
+                aramaicToHebrew.classList.remove("hidden");
+                hebrewToAramaic.classList.add("hidden");
+            } else {
+                aramaicToHebrew.classList.add("hidden");
+                hebrewToAramaic.classList.remove("hidden");
+            }
+
+            // מנקה את תוצאות החיפוש בעת החלפת כיוון
+            document.getElementById("result").innerHTML = "";
+        }
+    </script>
+
+</body>
+</html>
